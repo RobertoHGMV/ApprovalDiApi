@@ -1,4 +1,5 @@
 ﻿using SAPbobsCOM;
+using System.Collections.Generic;
 
 namespace ApprovalDiApi.Services
 {

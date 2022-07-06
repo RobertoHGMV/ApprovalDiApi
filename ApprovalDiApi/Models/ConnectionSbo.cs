@@ -10,12 +10,12 @@ namespace ApprovalDiApi.Models
     public class ConnectionSbo
     {
         public ConnectionSbo(
-            string server, 
-            string companyDB, 
-            string dbUserName, 
-            string dbPassword, 
-            BoDataServerTypes dbServerType, 
-            string userName, 
+            string server,
+            string companyDB,
+            string dbUserName,
+            string dbPassword,
+            BoDataServerTypes dbServerType,
+            string userName,
             string password)
         {
             Server = server;
