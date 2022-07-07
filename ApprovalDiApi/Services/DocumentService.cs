@@ -10,7 +10,7 @@ namespace ApprovalDiApi.Services
             var document = company.GetBusinessObject(BoObjectTypes.oPurchaseOrders) as Documents;
 
             var currentDate = DateTime.Now.Date;
-            //document.BPL_IDAssignedToInvoice = 1;
+            document.BPL_IDAssignedToInvoice = 1;
             document.CardCode = "COL000001";
             document.CardName = "FORNECEDOR";
             document.TaxDate = currentDate;

@@ -5,46 +5,32 @@ namespace ApprovalDiApi.Services
 {
     public class ApprovationSboService
     {
-        private ApprovalTemplatesService ApprovalTemplatesService { get; set; }
-        private List<ApprovalTemplate> ApprovalTemplatesList { get; set; }
-
-        public ApprovationSboService(Company company)
+        public void ActiveAndCheckApproval(Company company, Documents document, List<int> wtmCodes)
         {
-            ApprovalTemplatesList = new List<ApprovalTemplate>();
-
-            var companyService = company.GetCompanyService();
-            ApprovalTemplatesService = companyService.GetBusinessService(ServiceTypes.ApprovalTemplatesService) as ApprovalTemplatesService;
-        }
-
-        public void ActiveAndCheckApproval(Documents document, List<int> wtmCodes)
-        {
-            ActiveApprovalTemplates(wtmCodes);
+            SetApprovalTemplateIsActive(company, wtmCodes, BoYesNoEnum.tYES);
             CheckForApproval(document);
         }
 
-        private void ActiveApprovalTemplates(List<int> wtmCodes)
+        public void DisableApprovalTemplates(Company company, List<int> wtmCodes)
         {
+            SetApprovalTemplateIsActive(company, wtmCodes, BoYesNoEnum.tYES);
+        }
+
+        private void SetApprovalTemplateIsActive(Company company, List<int> wtmCodes, BoYesNoEnum boYesNoEnum)
+        {
+            var companyService = company.GetCompanyService();
+            var approvalTemplatesService = companyService.GetBusinessService(ServiceTypes.ApprovalTemplatesService) as ApprovalTemplatesService;
+
             foreach (var code in wtmCodes)
             {
-                var oApprovalTemplateParams = ApprovalTemplatesService?.GetDataInterface(ApprovalTemplatesServiceDataInterfaces.atsdiApprovalTemplateParams) as ApprovalTemplateParams;
+                var oApprovalTemplateParams = approvalTemplatesService?.GetDataInterface(ApprovalTemplatesServiceDataInterfaces.atsdiApprovalTemplateParams) as ApprovalTemplateParams;
 
                 if (oApprovalTemplateParams != null)
                 {
                     oApprovalTemplateParams.Code = code;
-                    var approvalTemplate = ApprovalTemplatesService.GetApprovalTemplate(oApprovalTemplateParams);
-                    approvalTemplate.IsActive = BoYesNoEnum.tYES;
-                    ApprovalTemplatesService.UpdateApprovalTemplate(approvalTemplate);
-                    ApprovalTemplatesList.Add(approvalTemplate);
+                    var approvalTemplate = approvalTemplatesService.GetApprovalTemplate(oApprovalTemplateParams);
+                    approvalTemplate.IsActive = boYesNoEnum;
                 }
-            }
-        }
-
-        public void DisableApprovalTemplates()
-        {
-            foreach (var approval in ApprovalTemplatesList)
-            {
-                approval.IsActive = BoYesNoEnum.tNO;
-                ApprovalTemplatesService.UpdateApprovalTemplate(approval);
             }
         }
 

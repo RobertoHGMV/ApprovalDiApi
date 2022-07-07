@@ -37,19 +37,19 @@ namespace ApprovalDiApi
         {
             try
             {
-                var wtmCode = 4;
-                var appService = new ApprovationSboService(company);
+                var wtmCodes = new List<int> { 4 };
+                var appService = new ApprovationSboService();
                 var docService = new DocumentService();
 
                 var document = docService.CreateDocument(company);
 
                 company.StartTransaction();
 
-                appService.ActiveAndCheckApproval(document, new List<int> { wtmCode });
+                appService.ActiveAndCheckApproval(company, document, wtmCodes);
 
                 docService.Add(company, document);
 
-                appService.DisableApprovalTemplates();
+                appService.DisableApprovalTemplates(company, wtmCodes);
 
                 if (company.InTransaction)
                     company.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
@@ -66,13 +66,13 @@ namespace ApprovalDiApi
         private static ConnectionSbo GetParams()
         {
             return new ConnectionSbo(
-                @"DESKTOP-JHISO7L\B1",
-                "SBO_ENGESOFTWARE_TESTE",
-                "sa",
-                "sap@123",
+                @"SERVER",
+                "DATABASE",
+                "DB_USER",
+                "DB_PASS",
                 BoDataServerTypes.dst_MSSQL2017,
-                "manager",
-                "sapbone");
+                "SAP_USER",
+                "SAP_PASS");
         }
 
         private static void PrintSuccess()
