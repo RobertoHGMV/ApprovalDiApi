@@ -30,6 +30,7 @@ namespace ApprovalDiApi.Services
                     oApprovalTemplateParams.Code = code;
                     var approvalTemplate = approvalTemplatesService.GetApprovalTemplate(oApprovalTemplateParams);
                     approvalTemplate.IsActive = boYesNoEnum;
+                    approvalTemplatesService.UpdateApprovalTemplate(approvalTemplate);
                 }
             }
         }
